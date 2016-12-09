@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>轮播淡入淡出特效</title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			#box{
+				width: 1226px;
+				height: 420px;
+				margin: 100px auto;
+				position: relative;
+			}
+			img{
+				position: absolute;
+				display: none;
+			}
+			#left,#right{
+				position: absolute;
+				top:50%;
+				margin-top:-40px ;
+				width:50px;
+				height: 80px;
+				text-align: center;
+				line-height: 80px;
+				font-size: 40px;
+				color: #fff;
+				background: rgba(0,0,0,0.5);
+				cursor: pointer;
+			}
+			#left:hover,#right:hover{
+				background: rgba(0,0,0,0.7);
+			}
+			#left{
+				left: 250px;
+			}
+			#right{
+				right: 0px;
+			}
+			ul{
+				width: 150px;
+				height: 15px;
+				position: absolute;
+				bottom: 10px;
+				right: 90px;
+			}
+			li{
+				width: 10px;
+				height: 10px;
+				border-radius: 7px;
+				border: 1px solid #fff;
+				margin-right: 15px;
+				background:#fff;
+				cursor: pointer;
+				float: left;
+			}
+			li.active{
+				background: #666;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<img src="images/11.jpg"/>
+			<img src="images/21.jpg"/>
+			<img src="images/31.jpg"/>
+			<img src="images/41.jpg"/>
+			<img src="images/51.jpg"/>
+			<div id="left">&lt;</div>
+			<div id="right">&gt;</div>
+			<ul>
+				<li class="active"></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+		<script>
+			var oLi = document.getElementsByTagName("li");
+			var oImg = document.getElementsByTagName("img");
+			var next = document.getElementById("right");
+			var prev = document.getElementById("left")
+			oImg[0].style.display="block";
+			var _index = 0;
+			for(var i=0;i<oLi.length;i++){
+				oLi[i].index=i;
+				oLi[i].onclick = function(){
+					_index = this.index;//保存的下标
+					for(var j=0;j<oLi.length;j++){
+						oLi[j].className="";
+						oImg[j].style.display="none";
+					}
+//					oImg[_index].style.display="block";
+					fadeIn(oImg[_index],2)
+					this.className="active";
+				}
+			}
+			next.onclick = function(){
+				fadeOut(oImg[_index],2)
+				_index++;
+				if(_index>4){
+					_index=0;
+				}
+				f();//调用封装函数
+//				oImg[_index].style.display="block";
+				fadeIn(oImg[_index],2)
+			}
+			prev.onclick = function(){
+				fadeOut(oImg[_index],2)
+								
+				_index--;
+				if(_index<0){
+					_index=4;
+				}
+				f(); //调用封装函数
+//				oImg[_index].style.display="block";
+				fadeIn(oImg[_index],2)
+			}
+			function f(){  //封装函数
+				for(var j=0;j<oLi.length;j++){
+					oLi[j].className="";
+					oImg[j].style.display="none";
+				}
+				
+				oLi[_index].className="active";
+			}
+			//淡入淡出特效
+			//淡入
+			function fadeIn(obj,speed){ //传参  形式参   .spend速度
+				var opa=0; //透明初始值
+				obj.style.display="block";
+				obj.style.opacity=0;
+				var timer=setInterval(function(){
+					opa=opa+speed;
+					if(opa>=100){
+						opa=100;
+						clearInterval(timer);
+					}
+					obj.style.opacity=opa/100
+				},13)
+			}
+			//淡出
+			function fadeOut(obj,speed){
+				var opa=100;
+				var timer=setInterval(function(){
+					opa-=speed;
+					if(opa<=0){
+						opa=0;
+						clearInterval(timer);
+						obj.style.display="none";
+					}
+					obj.style.opacity=opa/100
+				},13)
+			}
+		</script>
+	</body>
+</html>
